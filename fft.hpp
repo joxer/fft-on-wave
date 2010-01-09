@@ -6,6 +6,8 @@
 #include <cstring>
 #include <iostream>
 
+#ifndef FFT_HPP
+#define FFT_HPP
 class FFT_Exception: public std::exception{
   int error;
 public:
@@ -29,3 +31,4 @@ public:
   double getFreq(int);
   void setBuffer(const std::vector<double>&);
 };
+#endif

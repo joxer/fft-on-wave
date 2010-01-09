@@ -1,23 +1,31 @@
 #include <iostream>
 #include "dsp.hpp"
 #include "fft.hpp"
-#include "sound.hpp"
 #include <vector>
+#include "sound.hpp"
+
 
 int main(){
   try{
-    DSP dsp(88200, 1500);
-    std::vector<double> tmp = dsp.get_buffer_double();;
-    FFT fft(tmp, 1500);
+    std::vector<std::string> _note;
+    _note.push_back("Do");
+    _note.push_back("Re");
+    _note.push_back("Mi");
+    _note.push_back("Fa");
+    _note.push_back("Sol");
+    _note.push_back("La");
+    _note.push_back("Si");
+    
+    // DSP dsp(88200, 20000);
+    std::vector<double> tmp = Sound::file("si.wav");//dsp.get_buffer_double();
+    FFT fft(tmp, 50000);
     int i = 0;
-    while(i++ != 100){
-      dsp.read();
-      dsp.write();
-      tmp = dsp.get_buffer_double();
-      fft.setBuffer(tmp);
-      tmp = fft();
-      std::cout << Sound::recognize(tmp, 88200, 1500) << std::endl;
-      }
+    //dsp.read();
+    //tmp = dsp.get_buffer_double();
+    //fft.setBuffer(tmp);
+    tmp = fft();
+    std::cout << Sound::recognize(tmp, 44100, 50000, _note) << std::endl;
+    
   }catch (DSP_Exception e){
     std::cout << e.what() << std::endl;
   }

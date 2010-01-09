@@ -41,7 +41,7 @@ FFT::~FFT(){
   fftw_cleanup();
 }
 
-static double FFT::getMaxFreq (const std::vector<double>& data)  {
+double FFT::getMaxFreq (const std::vector<double>& data)  {
 	int i, maxIndex = 1;
 	double maxFreq = data[maxIndex];
 	

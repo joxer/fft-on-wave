@@ -13,7 +13,6 @@ DSP::DSP(int _bitrate,  int _size = 15000){
 
   if(_bitrate < 0|| size < 0)
     throw DSP_Exception(28);
-
   bitrate = _bitrate;
   bit = 8;
   channel = 1;
