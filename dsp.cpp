@@ -9,10 +9,17 @@ const char* DSP_Exception::what(){
 };
 
 
-DSP::DSP(int _bitrate, int _bit, int _channel): bitrate(_bitrate), bit(_bit), channel(_channel){
+DSP::DSP(int _bitrate,  int _size = 15000){
+
+  if(_bitrate < 0|| size < 0)
+    throw DSP_Exception(28);
+
+  bitrate = _bitrate;
+  bit = 8;
+  channel = 1;
+  size = _size;
   fd = open("/dev/dsp", O_RDWR);
   check(fd);
-  size = 15000;
   buffer = (unsigned char*) malloc(size*sizeof(unsigned char));
   status = ioctl(fd, SOUND_PCM_WRITE_BITS, &bit);
   check(status);

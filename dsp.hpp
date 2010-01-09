@@ -22,7 +22,7 @@ class DSP{
   int status;
   unsigned char *buffer;
 public:
-  DSP(int ,int , int );
+  DSP(int ,int );
   virtual ~DSP();
   void read();
   void write();
