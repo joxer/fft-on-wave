@@ -1,15 +1,17 @@
 CC = g++
 FLAGS= -lm -lfftw3 -O2
-FILES= fft.cpp dsp.cpp
+FILES= fft.cpp dsp.cpp sound.cpp
+
+
+deafult: all
+
 
 lib: 
 	$(CC) $(FLAGS) -c $(FILES)
-	ar rcs fft.a fft.o dsp.o
+	ar rcs fft.a fft.o dsp.o sound.o
 
 all: lib
 	$(CC) $(FLAGS) main.cpp fft.a -o fftonwave.o
 
-deafult: all
-
 clean:
-	rm -f *.o *.~ *#
+	rm -f *.o *~ *# *.a

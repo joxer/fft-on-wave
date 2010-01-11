@@ -1,4 +1,5 @@
 #include <iostream>
+#include <fstream>
 #include "dsp.hpp"
 #include "fft.hpp"
 #include <vector>
@@ -17,17 +18,20 @@ int main(){
     _note.push_back("Si");
     
     // DSP dsp(88200, 20000);
-    std::vector<double> tmp = Sound::file("si.wav");//dsp.get_buffer_double();
-    FFT fft(tmp, 50000);
-    int i = 0;
-    //dsp.read();
-    //tmp = dsp.get_buffer_double();
-    //fft.setBuffer(tmp);
-    tmp = fft();
-    std::cout << Sound::recognize(tmp, 44100, 50000, _note) << std::endl;
+    Sound::SoundFile sound("notes/0-440.wav", 4000);//dsp.get_buffer_double();
     
-  }catch (DSP_Exception e){
-    std::cout << e.what() << std::endl;
+    FFT fft(sound.read(), 4000);
+    int i = 0;
+    std::vector<double> tmp = sound.read();
+    do{
+      fft.setBuffer(tmp);
+      tmp = fft();
+      std::cout << Sound::recognize(tmp, 44100, 4000, _note) << std::endl; 
+      tmp = sound.read();
+    }while(sound.good());
+    
+  }catch (std::fstream::failure e){
+    std::cout << e.what()  << std::endl;
   }
   
   
