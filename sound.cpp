@@ -1,7 +1,8 @@
 #include "sound.hpp"
 
 
-/*float Sound::recognize(const std::vector<double>& values, int bitrate, int size/*, const std::vector<std::string>& _note*/){
+/*
+  float Sound::recognize(const std::vector<double>& values, int bitrate, int size, const std::vector<std::string>& _note){
   float freq, note;
   freq = bitrate * FFT::getMaxFreq(values) / size;
   note =  12* log(freq/440)/log(2);
@@ -18,7 +19,7 @@ std::vector<double> file(const std::string& file){
     }
     return tmp;
 }
-Sound::SoundFile::SoundFile(const std::string& file, int _size){
+Sound::Acquisition::File::File(const std::string& file, int _size){
   size = _size;
   stream = new std::fstream(file.c_str(), std::ios_base::in);
   //stream->exceptions(std::ios::badbit | std::ios::failbit | std::ios::eofbit);
@@ -27,11 +28,11 @@ Sound::SoundFile::SoundFile(const std::string& file, int _size){
     //throw std::exception;
 };
 
-Sound::SoundFile::~SoundFile(){
+Sound::Acquisition::File::~File(){
   stream->close();
 }
 
-std::vector<double>Sound::SoundFile::read(){
+std::vector<double>Sound::Acquisition::File::read(){
   int i = 0;
   std::vector<double> tmp;
   while(!stream->eof() && i++ != size){
@@ -41,7 +42,7 @@ std::vector<double>Sound::SoundFile::read(){
   return tmp;
 }
 
-std::vector<double>Sound::SoundFile::_read(int offset){
+std::vector<double>Sound::Acquisition::File::_read(int offset){
   stream->seekp(offset);
   int i = 0;
   std::vector<double> tmp;
@@ -52,6 +53,6 @@ std::vector<double>Sound::SoundFile::_read(int offset){
   return tmp;
 }
 
-bool Sound::SoundFile::good(){
+bool Sound::Acquisition::File::good(){
   return stream->good();
 }

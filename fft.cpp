@@ -1,40 +1,40 @@
-#include "fft.hpp"
+#include "sound.hpp"
 
-FFT::FFT(const std::vector<double>& vect, int _size){
+Sound::FFT::FFT(const std::vector<double>& vect, int _size){
   size = _size;
   fin = (fftw_complex*) fftw_malloc(size * sizeof(fftw_complex));
   if(fin == NULL)
-    throw FFT_Exception(errno);
+    throw Exception::FFT_Exception(errno);
   fout = (fftw_complex*) fftw_malloc(size * sizeof(fftw_complex));
   if(fout == NULL)
-    throw FFT_Exception(errno);
+    throw Exception::FFT_Exception(errno);
   for(int i = 0; i < size;i++){
     fin[i][0] = vect[i];
     fin[i][1] = 0.0;
   }
 }
 
-FFT::FFT(int _size){
+Sound::FFT::FFT(int _size){
   size = _size;
   fin = (fftw_complex*) fftw_malloc(size * sizeof(fftw_complex));
   if(fin == NULL)
-    throw FFT_Exception(errno);
+    throw Exception::FFT_Exception(errno);
   fout = (fftw_complex*) fftw_malloc(size * sizeof(fftw_complex));
   if(fout == NULL)
-    throw FFT_Exception(errno);
+    throw Exception::FFT_Exception(errno);
 }
 
 
-void FFT::setBuffer(const std::vector<double>& buffer){
+void Sound::FFT::setBuffer(const std::vector<double>& buffer){
   if(buffer.size() != size)
-    throw FFT_Exception(28);
+    throw Exception::FFT_Exception(28);
   for(int i = 0; i < size;i++){
      fin[i][0] = buffer[i];
      fin[i][1] = 0.0;
    }
 }
 
-std::vector<double> FFT::apply(){
+std::vector<double> Sound::FFT::apply(){
   std::vector<double> tmp;
   p = fftw_plan_dft_1d(size, fin,fout, FFTW_FORWARD, FFTW_ESTIMATE);
   fftw_execute(p);
@@ -42,14 +42,14 @@ std::vector<double> FFT::apply(){
     tmp.push_back(sqrt(fout[i][0] * fout[i][0] + fout[i][1] * fout[i][1]));
   return tmp;
 }
-FFT::~FFT(){
+Sound::FFT::~FFT(){
   fftw_destroy_plan(p);
   fftw_free(fin);
   fftw_free(fout);
   fftw_cleanup();
 }
 
-double FFT::getMaxFreq (const std::vector<double>& data)  {
+double Sound::FFT::getMaxFreq (const std::vector<double>& data)  {
 	int i, maxIndex = 1;
 	double maxFreq = data[maxIndex];
 	
@@ -62,8 +62,8 @@ double FFT::getMaxFreq (const std::vector<double>& data)  {
 	return maxIndex;
 }
 
-FFT_Exception::FFT_Exception(int err)  throw(): error(err){}
-FFT_Exception::~FFT_Exception() throw(){}
-const char* FFT_Exception::what(){
+Sound::Exception::FFT_Exception::FFT_Exception(int err)  throw(): error(err){}
+Sound::Exception::FFT_Exception::~FFT_Exception() throw(){}
+const char* Sound::Exception::FFT_Exception::what(){
   return strerror(error);
 }
