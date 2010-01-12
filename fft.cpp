@@ -3,7 +3,11 @@
 FFT::FFT(const std::vector<double>& vect, int _size){
   size = _size;
   fin = (fftw_complex*) fftw_malloc(size * sizeof(fftw_complex));
+  if(fin == NULL)
+    throw FFT_Exception(errno);
   fout = (fftw_complex*) fftw_malloc(size * sizeof(fftw_complex));
+  if(fout == NULL)
+    throw FFT_Exception(errno);
   for(int i = 0; i < size;i++){
     fin[i][0] = vect[i];
     fin[i][1] = 0.0;
@@ -13,7 +17,11 @@ FFT::FFT(const std::vector<double>& vect, int _size){
 FFT::FFT(int _size){
   size = _size;
   fin = (fftw_complex*) fftw_malloc(size * sizeof(fftw_complex));
+  if(fin == NULL)
+    throw FFT_Exception(errno);
   fout = (fftw_complex*) fftw_malloc(size * sizeof(fftw_complex));
+  if(fout == NULL)
+    throw FFT_Exception(errno);
 }
 
 
@@ -26,7 +34,7 @@ void FFT::setBuffer(const std::vector<double>& buffer){
    }
 }
 
-std::vector<double> FFT::operator()(){
+std::vector<double> FFT::apply(){
   std::vector<double> tmp;
   p = fftw_plan_dft_1d(size, fin,fout, FFTW_FORWARD, FFTW_ESTIMATE);
   fftw_execute(p);

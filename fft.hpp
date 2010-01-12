@@ -19,14 +19,13 @@ public:
 
 class FFT{
   int size;
-  std::vector<double*> in ,out;
   fftw_complex *fin, *fout;
   fftw_plan p;
 public:
   FFT(const std::vector<double>&, int);
   FFT( int);
   virtual ~FFT();
-  std::vector<double> operator()();
+  std::vector<double> apply();
   static double getMaxFreq(const std::vector<double>&);
   double getFreq(int);
   void setBuffer(const std::vector<double>&);

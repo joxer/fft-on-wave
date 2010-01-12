@@ -3,11 +3,15 @@
 #include <fstream>
 #include <ios>
 #include "fft.hpp"
+#include "dsp.hpp"
 #ifndef SOUND_HPP
 #define SOUND_HPP
 namespace Sound{
   
-  float recognize(const std::vector<double>& , int , int , const std::vector<std::string>& );
+  
+
+
+  //float recognize(const std::vector<double>& , int , int/* , const std::vector<std::string>& */);
   class SoundFile{
     std::fstream *stream;
     int size;
