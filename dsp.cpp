@@ -75,3 +75,9 @@ int Sound::Acquisition::DSP::getBitrate() const{
 int Sound::Acquisition::DSP::getBit() const{
   return bit;
 }
+
+void Sound::Acquisition::DSP::setBuffer(const char* in){
+  
+  memcpy((char*)buffer,in, size);
+
+}

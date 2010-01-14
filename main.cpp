@@ -1,29 +1,24 @@
 
 #include <iostream>
 #include <fstream>
-#include "dsp.hpp"
-#include "fft.hpp"
 #include <vector>
 #include "sound.hpp"
-
-
+using namespace Sound;
 int main(){
   try{
-    DSP dsp(44100, 4000);
-    //Sound::SoundFile sound("notes/0-440.wav", 4000);//dsp.get_buffer_double();
+    Sound::Acquisition::DSP dsp(44100, 10000);
+    Acquisition::File sound("notes/do.wav", 10000);//dsp.get_buffer_double();
+    dsp.read();
+    std::vector<double> uh = sound.read();
+    std::vector<std::vector<double> > tmp = FFT::get_real_and_img(uh);
+    std::vector<double> tmp2 = FFT::apply_backward(tmp[0], tmp[1]);
+    std::string buff = "";
+    for(int i = 0; i < tmp2.size();i++)
+      buff += (unsigned char)tmp2[i];
+    dsp.setBuffer(buff.c_str());
+    dsp.write();
+
     
-    FFT fft(dsp.get_buffer_double(), 4000);
-    int i = 0;
-    std::vector<double> tmp;
-    tmp = fft.apply();
-    /*do{
-      fft.setBuffer(tmp);
-      tmp = fft.apply();
-      std::cout << Sound::recognize(tmp, 44100, 4000) << std::endl; 
-      dsp.read();
-      tmp = dsp.get_buffer_double();
-    }while(i++ != 100);
-    */
   }catch (std::fstream::failure e){
     std::cout << e.what()  << std::endl;
   }

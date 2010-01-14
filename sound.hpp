@@ -42,19 +42,13 @@ namespace Sound{
   }
   
   class FFT{
-    int size;
-    fftw_complex *fin, *fout;
-    fftw_plan p;
   public:
-    FFT(const std::vector<double>&, int);
-    FFT( int);
-    virtual ~FFT();
-    std::vector<double> apply();
+    static std::vector<double> apply_forward(const std::vector<double>&);
+    static std::vector<double> apply_backward(const std::vector<double>&, const std::vector<double>&);
+    static std::vector<std::vector<double> > get_real_and_img(const std::vector<double> &);
     static double getMaxFreq(const std::vector<double>&);
-    double getFreq(int);
-    void setBuffer(const std::vector<double>&);
   };
-  
+  float recognize(const std::vector<double>& , int , int/* , const std::vector<std::string>& */);
   namespace Acquisition{
     class DSP{
       int fd, size, bitrate, bit, channel;
@@ -65,7 +59,8 @@ namespace Sound{
       virtual ~DSP();
       void read();
       void write();
-    unsigned char* get_buffer() const;
+      void setBuffer(const char*);
+      unsigned char* get_buffer() const;
       std::vector<double> get_buffer_double() const;
       bool check(int value);
       int getSize() const;
@@ -73,8 +68,8 @@ namespace Sound{
       int getBitrate() const;
       int getBit() const;
     };
-  
-    //float recognize(const std::vector<double>& , int , int/* , const std::vector<std::string>& */);
+    
+    
     class File{
       std::fstream *stream;
       int size;

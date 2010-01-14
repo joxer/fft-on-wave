@@ -1,13 +1,11 @@
 #include "sound.hpp"
 
-
-/*
-  float Sound::recognize(const std::vector<double>& values, int bitrate, int size, const std::vector<std::string>& _note){
+float Sound::recognize(const std::vector<double>& values, int bitrate, int size){
   float freq, note;
-  freq = bitrate * FFT::getMaxFreq(values) / size;
+  freq = bitrate * FFT::getMaxFreq(values) / size ;
   note =  12* log(freq/440)/log(2);
-  return rint(note);
-}*/
+  return note;
+}
 
 std::vector<double> file(const std::string& file){
   std::vector<double> tmp;
@@ -43,7 +41,7 @@ std::vector<double>Sound::Acquisition::File::read(){
 }
 
 std::vector<double>Sound::Acquisition::File::_read(int offset){
-  stream->seekp(offset);
+  stream->seekg(offset);
   int i = 0;
   std::vector<double> tmp;
   while(stream->good() && i++ != size){

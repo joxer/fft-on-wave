@@ -1,53 +1,117 @@
 #include "sound.hpp"
+std::vector<double> Sound::FFT::apply_forward(const std::vector<double> &vect){
+  int size = vect.size();
+  std::vector<double> tmp;
+  fftw_complex *fin, *fout;
+  fftw_plan p;
+  
+  // TO DO
+  // avoid memory leak here
 
-Sound::FFT::FFT(const std::vector<double>& vect, int _size){
-  size = _size;
-  fin = (fftw_complex*) fftw_malloc(size * sizeof(fftw_complex));
+  fin = (fftw_complex*) fftw_malloc(size * sizeof(fftw_complex)); // <-
   if(fin == NULL)
     throw Exception::FFT_Exception(errno);
-  fout = (fftw_complex*) fftw_malloc(size * sizeof(fftw_complex));
+  fout = (fftw_complex*) fftw_malloc(size * sizeof(fftw_complex)); // <-
   if(fout == NULL)
     throw Exception::FFT_Exception(errno);
+  
+  //end to do
+  //PS dammit static
+
   for(int i = 0; i < size;i++){
     fin[i][0] = vect[i];
     fin[i][1] = 0.0;
   }
-}
-
-Sound::FFT::FFT(int _size){
-  size = _size;
-  fin = (fftw_complex*) fftw_malloc(size * sizeof(fftw_complex));
-  if(fin == NULL)
-    throw Exception::FFT_Exception(errno);
-  fout = (fftw_complex*) fftw_malloc(size * sizeof(fftw_complex));
-  if(fout == NULL)
-    throw Exception::FFT_Exception(errno);
-}
-
-
-void Sound::FFT::setBuffer(const std::vector<double>& buffer){
-  if(buffer.size() != size)
-    throw Exception::FFT_Exception(28);
-  for(int i = 0; i < size;i++){
-     fin[i][0] = buffer[i];
-     fin[i][1] = 0.0;
-   }
-}
-
-std::vector<double> Sound::FFT::apply(){
-  std::vector<double> tmp;
+  
   p = fftw_plan_dft_1d(size, fin,fout, FFTW_FORWARD, FFTW_ESTIMATE);
   fftw_execute(p);
   for(int i = 0; i < size;i++)
     tmp.push_back(sqrt(fout[i][0] * fout[i][0] + fout[i][1] * fout[i][1]));
-  return tmp;
-}
-Sound::FFT::~FFT(){
+  
   fftw_destroy_plan(p);
   fftw_free(fin);
   fftw_free(fout);
   fftw_cleanup();
+  
+  return tmp;
 }
+
+std::vector<std::vector<double> > Sound::FFT::get_real_and_img(const std::vector<double> &vect){
+  int size = vect.size();
+  std::vector<std::vector<double> > tmp;
+  std::vector<double> real, img;
+  fftw_complex *fin, *fout;
+  fftw_plan p;
+  tmp.push_back(real); // really crap solution :(
+  tmp.push_back(img); // i'm really sad
+  // TO DO
+  // avoid memory leak here
+
+  fin = (fftw_complex*) fftw_malloc(size * sizeof(fftw_complex)); // <-
+  if(fin == NULL)
+    throw Exception::FFT_Exception(errno);
+  fout = (fftw_complex*) fftw_malloc(size * sizeof(fftw_complex)); // <-
+  if(fout == NULL)
+    throw Exception::FFT_Exception(errno);
+  
+  //end to do
+  //PS dammit static
+
+  for(int i = 0; i < size;i++){
+    fin[i][0] = vect[i];
+    fin[i][1] = 0.0;
+  }
+  
+  p = fftw_plan_dft_1d(size, fin,fout, FFTW_FORWARD, FFTW_ESTIMATE);
+  fftw_execute(p);
+  for(int i = 0; i < size;i++){
+    tmp[0].push_back(fout[i][0]);
+    tmp[1].push_back(fout[i][1]);
+  }
+  fftw_destroy_plan(p);
+  fftw_free(fin);
+  fftw_free(fout);
+  fftw_cleanup();
+  
+  return tmp;
+}
+
+std::vector<double> Sound::FFT::apply_backward(const std::vector<double> &real, const std::vector<double> &img){
+  int size = real.size();
+  std::vector<double> tmp;
+  fftw_complex *fin, *fout;
+  fftw_plan p;
+  
+  // TO DO
+  // avoid memory leak here
+
+  fin = (fftw_complex*) fftw_malloc(size * sizeof(fftw_complex)); // <-
+  if(fin == NULL)
+    throw Exception::FFT_Exception(errno);
+  fout = (fftw_complex*) fftw_malloc(size * sizeof(fftw_complex)); // <-
+  if(fout == NULL)
+    throw Exception::FFT_Exception(errno);
+  
+  //end to do
+  //PS dammit static
+
+  for(int i = 0; i < size;i++){
+    fin[i][0] = real[i];
+    fin[i][1] = img[i];
+  }
+  
+  p = fftw_plan_dft_1d(size, fin,fout, FFTW_BACKWARD, FFTW_ESTIMATE);
+  fftw_execute(p);
+  for(int i = 0; i < size;i++)
+    tmp.push_back(fout[i][0]/size);
+  fftw_destroy_plan(p);
+  fftw_free(fin);
+  fftw_free(fout);
+  fftw_cleanup();
+  return tmp;
+}
+
+
 
 double Sound::FFT::getMaxFreq (const std::vector<double>& data)  {
 	int i, maxIndex = 1;
