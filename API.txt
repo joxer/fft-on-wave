@@ -1,0 +1,20 @@
+class FFT
+
+The class that apply the fft to the varius signal
+
+apply_forward: apply the fft
+apply_backward: apply the inverse fft
+
+You can apply the fft forward and get module or you can get the imaginary and real part
+
+class DSP
+
+DSP: in the construnctor you must specify the rate of the sound and how long you want record
+read: read data by the mic and fill the buffer
+write: write something in the buffer and play it
+set_buffer: set the content of a buffer
+
+class File
+
+Open a file and read it
+The file must contain a 8bit PCM audio, or you can't analyze it
