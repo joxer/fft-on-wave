@@ -60,23 +60,23 @@ bool Sound::Acquisition::DSP::check(int value){
     return true;
 }
 
-int Sound::Acquisition::DSP::getSize() const{
+int Sound::Acquisition::DSP::get_size() const{
   return size;
 }
 
-int Sound::Acquisition::DSP::getChannel() const{
+int Sound::Acquisition::DSP::get_channel() const{
   return channel;
 }
 
-int Sound::Acquisition::DSP::getBitrate() const{
+int Sound::Acquisition::DSP::get_bitrate() const{
   return bitrate;
 }
 
-int Sound::Acquisition::DSP::getBit() const{
+int Sound::Acquisition::DSP::get_bit() const{
   return bit;
 }
 
-void Sound::Acquisition::DSP::setBuffer(const char* in){
+void Sound::Acquisition::DSP::set_buffer(const char* in){
   
   memcpy((char*)buffer,in, size);
 

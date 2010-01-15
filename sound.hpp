@@ -1,5 +1,5 @@
 #include <linux/soundcard.h>
-#include <stdlib.h>
+#include <cstdlib>
 #include <unistd.h>
 #include <iostream>
 #include <exception>
@@ -9,17 +9,13 @@
 #include <sys/ioctl.h>
 #include <cstring>
 #include <vector>
-#include <vector>
 #include <string>
 #include <fstream>
 #include <ios>
-#include <vector>
 #include <fftw3.h>
 #include <cmath>
 #include <exception>
 #include <errno.h>
-#include <cstring>
-#include <iostream>
 
 #ifndef SOUND_HPP
 #define SOUND_HPP
@@ -45,8 +41,9 @@ namespace Sound{
   public:
     static std::vector<double> apply_forward(const std::vector<double>&);
     static std::vector<double> apply_backward(const std::vector<double>&, const std::vector<double>&);
+    static std::string apply_backward_string(const std::vector<double>&, const std::vector<double>&);
     static std::vector<std::vector<double> > get_real_and_img(const std::vector<double> &);
-    static double getMaxFreq(const std::vector<double>&);
+    static double get_max_freq(const std::vector<double>&);
   };
   float recognize(const std::vector<double>& , int , int/* , const std::vector<std::string>& */);
   namespace Acquisition{
@@ -59,14 +56,14 @@ namespace Sound{
       virtual ~DSP();
       void read();
       void write();
-      void setBuffer(const char*);
+      void set_buffer(const char*);
       unsigned char* get_buffer() const;
       std::vector<double> get_buffer_double() const;
       bool check(int value);
-      int getSize() const;
-      int getChannel() const;
-      int getBitrate() const;
-      int getBit() const;
+      int get_size() const;
+      int get_channel() const;
+      int get_bitrate() const;
+      int get_bit() const;
     };
     
     
@@ -79,7 +76,7 @@ namespace Sound{
       ~File();
       std::vector<double>read();
       std::vector<double>_read(int offset = 0);
-      bool good();
+      bool good() const;
     };
   }
 }

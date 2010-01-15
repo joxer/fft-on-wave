@@ -2,21 +2,11 @@
 
 float Sound::recognize(const std::vector<double>& values, int bitrate, int size){
   float freq, note;
-  freq = bitrate * FFT::getMaxFreq(values) / size ;
+  freq = bitrate * FFT::get_max_freq(values) / size ;
   note =  12* log(freq/440)/log(2);
   return note;
 }
 
-std::vector<double> file(const std::string& file){
-  std::vector<double> tmp;
-  std::fstream stream(file.c_str(), std::ios_base::in);
-    char ch;
-    int i = 0;
-    while(stream.get(ch) && i++ < 50000){
-      tmp.push_back((double)(unsigned char) ch);
-    }
-    return tmp;
-}
 Sound::Acquisition::File::File(const std::string& file, int _size){
   size = _size;
   stream = new std::fstream(file.c_str(), std::ios_base::in);
@@ -51,6 +41,6 @@ std::vector<double>Sound::Acquisition::File::_read(int offset){
   return tmp;
 }
 
-bool Sound::Acquisition::File::good(){
+bool Sound::Acquisition::File::good() const{
   return stream->good();
 }

@@ -111,9 +111,44 @@ std::vector<double> Sound::FFT::apply_backward(const std::vector<double> &real, 
   return tmp;
 }
 
+std::string Sound::FFT::apply_backward_string(const std::vector<double> &real, const std::vector<double> &img){
+  int size = real.size();
+  std::string stream;
+  fftw_complex *fin, *fout;
+  fftw_plan p;
+  
+  // TO DO
+  // avoid memory leak here
+  
+  fin = (fftw_complex*) fftw_malloc(size * sizeof(fftw_complex)); // <-
+  if(fin == NULL)
+    throw Exception::FFT_Exception(errno);
+  fout = (fftw_complex*) fftw_malloc(size * sizeof(fftw_complex)); // <-
+  if(fout == NULL)
+    throw Exception::FFT_Exception(errno);
+  
+  //end to do
+  //PS dammit static
+
+  for(int i = 0; i < size;i++){
+    fin[i][0] = real[i];
+    fin[i][1] = img[i];
+  }
+  
+  p = fftw_plan_dft_1d(size, fin,fout, FFTW_BACKWARD, FFTW_ESTIMATE);
+  fftw_execute(p);
+  for(int i = 0; i < size;i++)
+    stream += (unsigned char)(fout[i][0]/size);
+  fftw_destroy_plan(p);
+  fftw_free(fin);
+  fftw_free(fout);
+  fftw_cleanup();
+  return stream;
+}
 
 
-double Sound::FFT::getMaxFreq (const std::vector<double>& data)  {
+
+double Sound::FFT::get_max_freq (const std::vector<double>& data)  {
 	int i, maxIndex = 1;
 	double maxFreq = data[maxIndex];
 	
