@@ -16,27 +16,30 @@
 #include <cmath>
 #include <exception>
 #include <errno.h>
-
+#include <sndfile.h>
 #ifndef SOUND_HPP
 #define SOUND_HPP
 namespace Sound{
   namespace Exception{
-    class FFT_Exception: public std::exception{
+    class Exception: public std::exception{
       int error;
     public:
-      FFT_Exception(int) throw();
-      virtual ~FFT_Exception() throw();
+      Exception(int) throw();
+      virtual ~Exception() throw();
       const char* what();
     };
-    class DSP_Exception: public std::exception{
-      int err;
+    class Sound_Exception: public std::exception{
+      int error;
     public:
-      DSP_Exception(int error) throw();
-      virtual ~DSP_Exception() throw();
+      Sound_Exception(int) throw();
+      virtual ~Sound_Exception() throw();
       const char* what();
     };
+
   }
   
+  
+
   class FFT{
   public:
     static std::vector<double> apply_forward(const std::vector<double>&);
@@ -45,7 +48,7 @@ namespace Sound{
     static std::vector<std::vector<double> > get_real_and_img(const std::vector<double> &);
     static double get_max_freq(const std::vector<double>&);
   };
-  float recognize(const std::vector<double>& , int , int/* , const std::vector<std::string>& */);
+  float recognize(const std::vector<double>& , int);
   namespace Acquisition{
     class DSP{
       int fd, size, bitrate, bit, channel;
@@ -68,15 +71,17 @@ namespace Sound{
     
     
     class File{
-      std::fstream *stream;
+      SF_INFO info;
+      std::string path;
+      SNDFILE *file;
+      int *buffer;
       int size;
-      char ch;
     public:
       File(const std::string&, int);
       ~File();
       std::vector<double>read();
-      std::vector<double>_read(int offset = 0);
-      bool good() const;
+      int get_bitrate() const;
+      int get_channels() const;
     };
   }
 }

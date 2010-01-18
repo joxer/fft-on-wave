@@ -1,46 +1,42 @@
 #include "sound.hpp"
 
-float Sound::recognize(const std::vector<double>& values, int bitrate, int size){
+float Sound::recognize(const std::vector<double>& values, int bitrate){
   float freq, note;
-  freq = bitrate * FFT::get_max_freq(values) / size ;
+  freq = bitrate * FFT::get_max_freq(values) / values.size() ;
   note =  12* log(freq/440)/log(2);
   return note;
 }
 
-Sound::Acquisition::File::File(const std::string& file, int _size){
+Sound::Acquisition::File::File(const std::string& _file, int _size = 5000){
+  
   size = _size;
-  stream = new std::fstream(file.c_str(), std::ios_base::in);
-  //stream->exceptions(std::ios::badbit | std::ios::failbit | std::ios::eofbit);
-  stream->seekp(11); //to jump the header part
-  if(stream->fail());
-    //throw std::exception;
+  buffer = new int[size];
+  path = _file;
+
+  file = sf_open(path.c_str(), SFM_READ, &info);
+  int tmp;
+  if(tmp = sf_error(file) != 0)
+    throw Exception::Sound_Exception(tmp);
 };
 
 Sound::Acquisition::File::~File(){
-  stream->close();
+  free(buffer);
+  sf_close(file);
 }
 
 std::vector<double>Sound::Acquisition::File::read(){
-  int i = 0;
   std::vector<double> tmp;
-  while(!stream->eof() && i++ != size){
-    stream->get(ch);
-    tmp.push_back((double)(unsigned char)ch);
-  }
+  sf_read_int(file, buffer, size);
+  for(int k = 0; k < size;tmp.push_back(buffer[k++]));
   return tmp;
 }
 
-std::vector<double>Sound::Acquisition::File::_read(int offset){
-  stream->seekg(offset);
-  int i = 0;
-  std::vector<double> tmp;
-  while(stream->good() && i++ != size){
-    stream->get(ch);
-    tmp.push_back((double)(unsigned char)ch);
-  }
-  return tmp;
+int Sound::Acquisition::File::get_bitrate() const {
+  
+  return info.samplerate;
+
 }
 
-bool Sound::Acquisition::File::good() const{
-  return stream->good();
+int Sound::Acquisition::File::get_channels() const{
+  return info.channels;
 }

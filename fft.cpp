@@ -10,10 +10,10 @@ std::vector<double> Sound::FFT::apply_forward(const std::vector<double> &vect){
 
   fin = (fftw_complex*) fftw_malloc(size * sizeof(fftw_complex)); // <-
   if(fin == NULL)
-    throw Exception::FFT_Exception(errno);
+    throw Exception::Exception(errno);
   fout = (fftw_complex*) fftw_malloc(size * sizeof(fftw_complex)); // <-
   if(fout == NULL)
-    throw Exception::FFT_Exception(errno);
+    throw Exception::Exception(errno);
   
   //end to do
   //PS dammit static
@@ -49,10 +49,10 @@ std::vector<std::vector<double> > Sound::FFT::get_real_and_img(const std::vector
 
   fin = (fftw_complex*) fftw_malloc(size * sizeof(fftw_complex)); // <-
   if(fin == NULL)
-    throw Exception::FFT_Exception(errno);
+    throw Exception::Exception(errno);
   fout = (fftw_complex*) fftw_malloc(size * sizeof(fftw_complex)); // <-
   if(fout == NULL)
-    throw Exception::FFT_Exception(errno);
+    throw Exception::Exception(errno);
   
   //end to do
   //PS dammit static
@@ -78,6 +78,7 @@ std::vector<std::vector<double> > Sound::FFT::get_real_and_img(const std::vector
 
 std::vector<double> Sound::FFT::apply_backward(const std::vector<double> &real, const std::vector<double> &img){
   int size = real.size();
+
   std::vector<double> tmp;
   fftw_complex *fin, *fout;
   fftw_plan p;
@@ -87,10 +88,10 @@ std::vector<double> Sound::FFT::apply_backward(const std::vector<double> &real, 
 
   fin = (fftw_complex*) fftw_malloc(size * sizeof(fftw_complex)); // <-
   if(fin == NULL)
-    throw Exception::FFT_Exception(errno);
+    throw Exception::Exception(errno);
   fout = (fftw_complex*) fftw_malloc(size * sizeof(fftw_complex)); // <-
   if(fout == NULL)
-    throw Exception::FFT_Exception(errno);
+    throw Exception::Exception(errno);
   
   //end to do
   //PS dammit static
@@ -122,10 +123,10 @@ std::string Sound::FFT::apply_backward_string(const std::vector<double> &real, c
   
   fin = (fftw_complex*) fftw_malloc(size * sizeof(fftw_complex)); // <-
   if(fin == NULL)
-    throw Exception::FFT_Exception(errno);
+    throw Exception::Exception(errno);
   fout = (fftw_complex*) fftw_malloc(size * sizeof(fftw_complex)); // <-
   if(fout == NULL)
-    throw Exception::FFT_Exception(errno);
+    throw Exception::Exception(errno);
   
   //end to do
   //PS dammit static
@@ -159,10 +160,4 @@ double Sound::FFT::get_max_freq (const std::vector<double>& data)  {
 		}
 	}
 	return maxIndex;
-}
-
-Sound::Exception::FFT_Exception::FFT_Exception(int err)  throw(): error(err){}
-Sound::Exception::FFT_Exception::~FFT_Exception() throw(){}
-const char* Sound::Exception::FFT_Exception::what(){
-  return strerror(error);
 }

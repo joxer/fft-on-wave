@@ -1,19 +1,9 @@
 #include "sound.hpp"
 
-Sound::Exception::DSP_Exception::DSP_Exception(int error) throw(){
-  err = error;
-}
-
-Sound::Exception::DSP_Exception::~DSP_Exception() throw(){};
-const char* Sound::Exception::DSP_Exception::what(){ 
-  return strerror(err);
-};
-
-
 Sound::Acquisition::DSP::DSP(int _bitrate,  int _size = 15000){
 
   if(_bitrate < 0|| size < 0)
-    throw Exception::DSP_Exception(28);
+    throw Exception::Exception(28);
   bitrate = _bitrate;
   bit = 8;
   channel = 1;
@@ -55,7 +45,7 @@ std::vector<double> Sound::Acquisition::DSP::get_buffer_double() const{
 
 bool Sound::Acquisition::DSP::check(int value){
   if(value < 0)
-    throw Exception::DSP_Exception(errno);
+    throw Exception::Exception(errno);
   else
     return true;
 }
