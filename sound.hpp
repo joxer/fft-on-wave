@@ -84,5 +84,13 @@ namespace Sound{
       int get_channels() const;
     };
   }
+
+  namespace Wave {
+    std::vector<double> sine(int, int, int);
+    std::vector<double> square(int, int, int);
+    std::vector<double> sawtooth(int, int, int);
+    std::vector<double> triangle(int, int, int);
+  }
+  
 }
 #endif
