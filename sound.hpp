@@ -90,6 +90,7 @@ namespace Sound{
     std::vector<double> square(int, int, int);
     std::vector<double> sawtooth(int, int, int);
     std::vector<double> triangle(int, int, int);
+    std::vector<double> sum(std::vector<double>, std::vector<double>);
   }
   
 }

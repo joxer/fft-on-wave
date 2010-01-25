@@ -8,37 +8,23 @@ using namespace Sound;
 int main(){
   try{
     Sound::Acquisition::DSP dsp(44100, 50000);
-    //Acquisition::File sound("notes/do.wav", 6000);//dsp.get_buffer_double();
-    /* std::vector<double> x;// = FFT::apply_forward(sound.read());
-    std::vector<double> y;
-    for(int i =0; i < 50000;i++){
-      x.push_back(24000*sin(2*3.14*261*i));
-      y.push_back(24000*cos(2*3.14*261*i));
+    std::vector<double> square1 = Sound::Wave::square(44100, 440, 50000);
+    std::vector<double> square2 = Sound::Wave::square(44100, 440, 50000);
+    std::vector<double> square = Sound::Wave::sum(square1, square2);
+    /*for(int i= 0; i < sine.size();i++){
+      result.push_back(0);
+      for(int j = -128; j < 128;j++)
+      result[i] += sine[i] * (square[i] - j)/(128*128);
+      //std::cout << result[i] << std::endl;
     }
     */
-    
-
-    //for(int i = 0 ; i < 50000;i++){
-      // the value must be multiplicated for 100 cause the signal vary bewteen -1 and 1 and add 128 cause the char is between 256 and 0
-      //tmp.push_back(128 + (100*sin(2*3.14*440*i/44100)));
-      //      std::cout << 128 + 100*sin(2*3.14*440*i/44100) << std::endl;
-    //}
-
-
-    //    std::cout << recognize(tmp, 44100) << std::endl;
-    
-    std::vector<double> tmp = Sound::Wave::triangle(44100, 440, 50000);// = FFT::apply_backward(x,y);
     std::string tmpp = "";
-    for(int i = 0; i < tmp.size();i++)
-      tmpp += 128 + (char)tmp[i];
+    for(int i = 0; i < square.size();i++){
+      tmpp += (unsigned char)square[i];
+    }
     dsp.set_buffer(tmpp.c_str());
     dsp.write();
-    tmp = Sound::Wave::sawtooth(44100, 440, 50000);// = FFT::apply_backward(x,y);
-    tmpp = "";
-    for(int i = 0; i < tmp.size();i++)
-      tmpp += 128 + (char)tmp[i];
-    dsp.set_buffer(tmpp.c_str());
-    dsp.write();
+    
   }catch (Sound::Exception::Exception e){
     std::cout << e.what()  << std::endl;
   }
