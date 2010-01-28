@@ -13,9 +13,9 @@ std::vector<double> Sound::Wave::square(int bitrate, int freq, int size){
   for(int i = 0; i < size; i++){
     tmp = 100*sin(2*3.14*freq*i/bitrate);
     if(tmp < 0)
-      buffer.push_back(127);
+      buffer.push_back(192);
     else
-      buffer.push_back(129);
+      buffer.push_back(64);
   }
   return buffer;
 }
@@ -62,7 +62,7 @@ std::vector<double> Sound::Wave::sum(std::vector<double> first, std::vector<doub
   for(int i = 0; i < first.size();i++){
     result.push_back(0);
     for(int j = max(0, i-first.size()+1); j < min(i, 500);j++){
-      result[i] += (first[j] * (second[i-j] ))/128;
+      result[i] += (first[j] * (second[i-j] ))/(4096);
     } 
  
   }
