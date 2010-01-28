@@ -1,5 +1,5 @@
 #include "sound.hpp"
-
+#include <cstdlib>
 std::vector<double> Sound::Wave::sine(int bitrate, int freq, int size){
   std::vector<double> buffer;
   for(int i = 0; i < size; i++)
@@ -42,15 +42,29 @@ std::vector<double> Sound::Wave::triangle(int bitrate, int freq, int size){
   return buffer;
 }
 
+int max(int i, int b){
+  if(i > b)
+    return i;
+  else
+    return b;
+}
+
+int min(int i, int b){
+  if(i < b)
+    return i;
+  else
+    return b;
+}
+
 std::vector<double> Sound::Wave::sum(std::vector<double> first, std::vector<double> second){
+  
   std::vector<double> result;
   for(int i = 0; i < first.size();i++){
     result.push_back(0);
-    for(int j = -127; j < 127;j++){
-      result[i] += first[i] * (second[i] -j) / (128*128);
-      
+    for(int j = max(0, i-first.size()+1); j < min(i, 500);j++){
+      result[i] += (first[j] * (second[i-j] ))/128;
     } 
-    std::cout << result[i] << std::endl;
+ 
   }
   return result;
 }
