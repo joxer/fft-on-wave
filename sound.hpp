@@ -49,6 +49,7 @@ namespace Sound{
     static double get_max_freq(const std::vector<double>&);
   };
   float recognize(const std::vector<double>& , int);
+  float get_freq(const std::vector<double>& , int);
   namespace Acquisition{
     class DSP{
       int fd, size, bitrate, bit, channel;

@@ -7,6 +7,12 @@ float Sound::recognize(const std::vector<double>& values, int bitrate){
   return note;
 }
 
+float Sound::get_freq(const std::vector<double>& values, int bitrate){
+  float freq, note;
+  freq = bitrate * FFT::get_max_freq(values) / values.size() ;
+  return freq;
+}
+
 Sound::Acquisition::File::File(const std::string& _file, int _size = 5000){
   
   size = _size;
